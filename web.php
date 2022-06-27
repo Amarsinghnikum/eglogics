@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\RestoController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,25 +13,21 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::group(['middleware'=>"web"],function(){
+    // Route::get('/','RestoController@index');
+    Route::get('/',[RestoController::class,'index']);
+    Route::get('/list',[RestoController::class,'list']);
+    Route::view('/add','add');
+    Route::post('/add','RestoController@add');
+    Route::get('/delete/{id}','RestoController@delete');
+    Route::get('/edit/{id}','RestoController@edit');
+    Route::post('edit','RestoController@update');
+    Route::view('register','register');
+    Route::post('register','RestoController@register');
+    Route::view('login','login');
+    Route::post('login','RestoController@login');
 });
-
-Route::match(['get','post'],'/login',[AdminController::class, 'Login']);
-Route::get('/session/remove',[AdminController::class, 'deleteUserProfile'])->name('session.delete');
-Route::get('/register',[AdminController::class, 'RegisterPage']);
-Route::match(['get','post'],'/saveregister',[AdminController::class, 'Register']);
-
-Route::get('/dashboard',[AdminController::class, 'Dashboard']);
-
-Route::get('/department',[AdminController::class, 'Department']);
-Route::post('/insert-department',[AdminController::class, 'insertDepartment']);
-Route::get('/edit-department/{id}', [AdminController::class, 'editDepartment']);
-Route::put('update-department/{id}', [AdminController::class, 'updateDepartment']);
-Route::get('/delete-department/{id}',[AdminController::class, 'destroyDepartment']);
-
-Route::get('/incharge',[AdminController::class, 'AddIncharge']);
-Route::post('/insert-incharge',[AdminController::class, 'insertIncharge']);
-Route::get('/edit-incharge/{id}', [AdminController::class, 'editIncharge']);
-Route::put('update-incharge/{id}', [AdminController::class, 'updateIncharge']);
-Route::get('/delete-incharge/{id}',[AdminController::class, 'destroyIncharge']);
